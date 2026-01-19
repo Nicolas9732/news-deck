@@ -3,16 +3,17 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Column } from '@/app/v2/lib/types';
-import { GripVertical, X, Settings } from 'lucide-react';
+import { NewsFeedColumn } from '../columns/news-feed-column';
+import { PolymarketColumn } from '../columns/polymarket-column';
+import { ReaderColumn } from '../columns/reader-column';
+import { GripVertical, X } from 'lucide-react';
 import { useLayout } from '@/app/v2/contexts/layout-context';
-import { cn } from '@/app/v2/lib/utils';
 
 interface DraggableColumnProps {
   column: Column;
-  children: React.ReactNode;
 }
 
-export function DraggableColumn({ column, children }: DraggableColumnProps) {
+export function DraggableColumn({ column }: DraggableColumnProps) {
   const { removeColumn } = useLayout();
   const {
     attributes,
@@ -26,57 +27,60 @@ export function DraggableColumn({ column, children }: DraggableColumnProps) {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    opacity: isDragging ? 0.5 : 1,
   };
 
-  // Calculate width in pixels (assuming 12-column grid, each column ~300px)
-  const widthClass = `w-[${column.width * 80 + (column.width - 1) * 16}px]`;
-  const minWidth = column.width * 80 + (column.width - 1) * 16;
+  const renderColumn = () => {
+    switch (column.type) {
+      case 'news':
+        return <NewsFeedColumn column={column} />;
+      case 'polymarket':
+        return <PolymarketColumn column={column} />;
+      case 'reader':
+        return <ReaderColumn column={column} />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div
       ref={setNodeRef}
-      style={{ ...style, minWidth: `${minWidth}px`, maxWidth: `${minWidth}px` }}
-      className={cn(
-        "h-full flex flex-col rounded-xl border border-border bg-card shadow-lg transition-all",
-        isDragging && "opacity-50 scale-95"
-      )}
+      style={style}
+      className="relative flex flex-col h-full"
     >
-      {/* Column header */}
-      <div className="flex-none flex items-center justify-between px-4 py-3 border-b border-border bg-card/50 backdrop-blur-sm">
-        <div className="flex items-center gap-2">
-          <button
-            {...attributes}
-            {...listeners}
-            className="cursor-grab active:cursor-grabbing p-1 hover:bg-muted rounded transition-colors"
-            aria-label="Drag to reorder"
-          >
-            <GripVertical className="w-4 h-4 text-muted-fg" />
-          </button>
-          <h3 className="text-sm font-semibold text-foreground">
-            {column.config.title || 'Column'}
-          </h3>
+      {/* Brutal Column Header */}
+      <div className="flex items-center justify-between gap-4 mb-4 p-4 border-[3px] border-border bg-card">
+        <div className="accent-bar" />
+
+        {/* Drag Handle */}
+        <button
+          {...attributes}
+          {...listeners}
+          className="flex-shrink-0 w-10 h-10 border-[3px] border-border hover:bg-muted cursor-grab active:cursor-grabbing flex items-center justify-center"
+        >
+          <GripVertical className="w-5 h-5" />
+        </button>
+
+        {/* Column Title */}
+        <div className="flex-1">
+          <h2 className="font-display text-2xl uppercase tracking-tight">
+            {column.config.title}
+          </h2>
         </div>
 
-        <div className="flex items-center gap-1">
-          <button
-            className="p-1 hover:bg-muted rounded transition-colors"
-            aria-label="Column settings"
-          >
-            <Settings className="w-4 h-4 text-muted-fg" />
-          </button>
-          <button
-            onClick={() => removeColumn(column.id)}
-            className="p-1 hover:bg-destructive/10 hover:text-destructive rounded transition-colors"
-            aria-label="Close column"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
+        {/* Remove Button */}
+        <button
+          onClick={() => removeColumn(column.id)}
+          className="flex-shrink-0 w-10 h-10 border-[3px] border-border hover:bg-destructive hover:text-white flex items-center justify-center"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
-      {/* Column content */}
-      <div className="flex-1 overflow-hidden">
-        {children}
+      {/* Column Content */}
+      <div className="flex-1 overflow-hidden border-[3px] border-border bg-card shadow-brutal">
+        {renderColumn()}
       </div>
     </div>
   );
