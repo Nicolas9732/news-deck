@@ -1,26 +1,132 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Terminal Base Colors - Deep Black & Phosphor Colors */
+  --background: #000000;
+  /* True Black */
+  --foreground: #e4e4e7;
+  /* Zinc 200 - Terminal Text */
+
+  /* UI Colors */
+  --card: #09090b;
+  /* Zinc 950 */
+  --card-foreground: #e4e4e7;
+  --popover: #09090b;
+  --popover-foreground: #e4e4e7;
+  --primary: #22c55e;
+  /* Terminal Green */
+  --primary-foreground: #000000;
+  --secondary: #27272a;
+  /* Zinc 800 */
+  --secondary-foreground: #e4e4e7;
+  --muted: #27272a;
+  --muted-foreground: #71717a;
+  /* Zinc 500 */
+  --accent: #27272a;
+  --accent-foreground: #e4e4e7;
+  --destructive: #ef4444;
+  --destructive-foreground: #e4e4e7;
+  --border: #3f3f46;
+  /* Zinc 700 - Stronger borders */
+  --input: #27272a;
+  --ring: #22c55e;
+
+  /* Border Radius - ZERO for Terminal Look */
+  --radius: 0px;
+
+  /* Command Center Quadrant Colors (Neon/Vibe) - High Saturation */
+  --color-brand-geo: #ea580c;
+  /* Orange-600 */
+  --color-brand-fin: #16a34a;
+  /* Green-600 */
+  --color-brand-tech: #0891b2;
+  /* Cyan-600 */
+  --color-brand-odds: #9333ea;
+  /* Purple-600 */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: var(--radius);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-geo: var(--color-brand-geo);
+  --color-fin: var(--color-brand-fin);
+  --color-tech: var(--color-brand-tech);
+  --color-odds: var(--color-brand-odds);
+
+  --font-sans: "JetBrains Mono", "Fira Code", monospace;
+  /* Enforce Mono Everywhere */
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-mono);
+  /* Force Mono */
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  /* Prevent body scroll, handle in quadrants */
+}
+
+/* CRT Scanline Effect Overlay (Optional but adds vibe) */
+.scanlines::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(to bottom,
+      rgba(18, 16, 16, 0) 50%,
+      rgba(0, 0, 0, 0.25) 50%);
+  background-size: 100% 4px;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.15;
+}
+
+/* Custom Scrollbar - Slim & Square */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #71717a;
+}
+
+/* Utilities for layout */
+.h-screen-safe {
+  height: 100vh;
 }
