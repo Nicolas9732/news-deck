@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Column } from '@/app/v2/lib/types';
 import { useLayout } from '@/app/v2/contexts/layout-context';
-import { ExternalLink, X, ArrowUp } from 'lucide-react';
+import { ExternalLink, X, ChevronUp } from 'lucide-react';
 import { formatRelativeTime } from '@/app/v2/lib/utils';
 
 interface ReaderColumnProps {
@@ -58,13 +58,12 @@ export function ReaderColumn({ column }: ReaderColumnProps) {
 
   if (!selectedArticle) {
     return (
-      <div className="h-full flex items-center justify-center p-12 text-center">
+      <div className="h-full flex items-center justify-center p-8 text-center">
         <div>
-          <div className="font-display text-4xl mb-4">SELECT</div>
-          <div className="font-display text-4xl mb-6">ARTICLE</div>
-          <p className="font-mono text-xs uppercase text-secondary">
+          <div className="text-orange text-2xl mb-2">NO ARTICLE SELECTED</div>
+          <div className="text-gray text-xs uppercase">
             Click any article to read
-          </p>
+          </div>
         </div>
       </div>
     );
@@ -72,29 +71,29 @@ export function ReaderColumn({ column }: ReaderColumnProps) {
 
   return (
     <div id="reader-content" className="h-full overflow-y-auto" onScroll={handleScroll}>
-      <article className="p-8 animate-slide-up-brutal">
+      <div className="p-6">
         {/* Header */}
-        <header className="mb-8 pb-8 border-b-[3px] border-border">
-          <div className="flex items-start justify-between gap-4 mb-6">
+        <div className="mb-6 pb-4 border-b border-border">
+          <div className="flex items-start justify-between gap-4 mb-4">
             <div className="flex-1">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="font-mono text-xs uppercase tracking-wider text-secondary">
+              <div className="flex items-center gap-3 mb-3 text-[10px]">
+                <span className="text-cyan font-semibold uppercase tracking-wider">
                   {selectedArticle.source}
                 </span>
-                <span className="text-secondary">•</span>
-                <time className="font-mono text-xs uppercase tracking-wider text-secondary">
+                <span className="text-gray">|</span>
+                <span className="text-gray uppercase tracking-wider">
                   {formatRelativeTime(selectedArticle.pubDate)}
-                </time>
+                </span>
               </div>
-              <h1 className="font-display text-4xl leading-tight mb-6">
+              <h1 className="text-orange text-xl leading-tight font-semibold">
                 {selectedArticle.title}
               </h1>
             </div>
             <button
               onClick={() => selectArticle(null)}
-              className="flex-shrink-0 w-12 h-12 border-[3px] border-border hover:bg-muted flex items-center justify-center"
+              className="flex-shrink-0 w-8 h-8 border border-border hover:border-red hover:text-red flex items-center justify-center text-xs"
             >
-              <X className="w-6 h-6" />
+              [X]
             </button>
           </div>
 
@@ -102,43 +101,43 @@ export function ReaderColumn({ column }: ReaderColumnProps) {
             href={selectedArticle.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-brutal inline-flex items-center gap-2"
+            className="btn-terminal inline-flex items-center gap-2"
           >
-            <ExternalLink className="w-4 h-4" />
-            OPEN ORIGINAL
+            <ExternalLink className="w-3 h-3" />
+            <span>OPEN ORIGINAL</span>
           </a>
-        </header>
+        </div>
 
         {/* Content */}
-        <div className="prose-brutal max-w-none">
+        <div className="text-sm leading-relaxed">
           {loading ? (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="h-4 border-[3px] border-border bg-muted animate-pulse-brutal" />
+                <div key={i} className="h-3 bg-muted animate-pulse" />
               ))}
             </div>
           ) : fullContent ? (
             <div
-              className="font-mono text-sm leading-relaxed"
+              className="text-gray [&>p]:mb-4 [&>h2]:text-orange [&>h2]:text-base [&>h2]:font-semibold [&>h2]:mb-3 [&>h2]:mt-6 [&>h3]:text-cyan [&>h3]:text-sm [&>h3]:font-semibold [&>h3]:mb-2 [&>h3]:mt-4"
               dangerouslySetInnerHTML={{ __html: fullContent }}
             />
           ) : selectedArticle.snippet ? (
-            <p className="font-mono text-sm text-muted-fg">{selectedArticle.snippet}</p>
+            <p className="text-gray text-sm">{selectedArticle.snippet}</p>
           ) : (
-            <p className="font-mono text-sm italic text-muted-fg">
+            <p className="text-red text-sm italic">
               CONTENT NOT AVAILABLE
             </p>
           )}
         </div>
-      </article>
+      </div>
 
       {/* Scroll to top */}
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 w-16 h-16 border-[3px] border-border bg-primary hover:bg-primary/90 flex items-center justify-center shadow-brutal animate-slide-up-brutal"
+          className="fixed bottom-20 right-8 w-10 h-10 border border-orange bg-muted hover:bg-card-hover flex items-center justify-center"
         >
-          <ArrowUp className="w-6 h-6 text-primary-fg" />
+          <ChevronUp className="w-4 h-4 text-orange" />
         </button>
       )}
     </div>

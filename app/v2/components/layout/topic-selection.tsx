@@ -3,19 +3,10 @@
 import { useState } from 'react';
 import { Topic } from '@/app/v2/lib/types';
 import { useTopic } from '@/app/v2/contexts/topic-context';
-import { TrendingUp, Cpu, Bitcoin, Globe, Search, Plus } from 'lucide-react';
-import { useTheme } from '@/app/v2/contexts/theme-context';
-
-const TOPIC_ICONS = {
-  TrendingUp,
-  Cpu,
-  Bitcoin,
-  Globe,
-};
+import { Search } from 'lucide-react';
 
 export function TopicSelection() {
   const { topics, selectTopic } = useTopic();
-  const { resolvedTheme, setTheme } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredTopics = topics.filter(topic =>
@@ -27,156 +18,118 @@ export function TopicSelection() {
   const geopoliticsTopics = filteredTopics.filter(t => t.type === 'geopolitics');
 
   return (
-    <div className="min-h-screen bg-background relative">
-      {/* Grid overlay */}
-      <div className="fixed inset-0 grid-overlay pointer-events-none" />
-
-      {/* Diagonal accent */}
-      <div className="fixed top-0 right-0 w-1/3 h-full bg-primary/5 transform skew-x-12 translate-x-1/2" />
-
-      {/* Header */}
-      <header className="relative z-10 border-b-[3px] border-border">
-        <div className="max-w-7xl mx-auto px-8 py-8">
-          <div className="flex items-start justify-between mb-6">
-            <div>
-              <h1 className="font-display text-6xl mb-2 leading-none">
-                INTELLIGENCE
-              </h1>
-              <div className="h-1 w-32 bg-primary" />
-            </div>
-
-            <button
-              onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-              className="btn-brutal"
-            >
-              {resolvedTheme === 'dark' ? '☀' : '☾'} {resolvedTheme === 'dark' ? 'LIGHT' : 'DARK'}
-            </button>
+    <div className="min-h-screen bg-background p-4">
+      {/* Top Status Bar */}
+      <div className="terminal-panel mb-4">
+        <div className="panel-header flex items-center justify-between">
+          <div className="flex items-center gap-8">
+            <span className="text-orange">BLOOMBERG</span>
+            <span className="text-gray">|</span>
+            <span className="text-blue">MONITOR</span>
+            <span className="text-gray">|</span>
+            <span className="text-cyan">{new Date().toLocaleTimeString()}</span>
           </div>
-
-          <p className="font-mono text-sm uppercase tracking-wider text-secondary">
-            SELECT MONITORING DOMAIN
-          </p>
+          <div className="flex items-center gap-4">
+            <span className="text-gray text-[10px]">TERMINAL v2.0</span>
+          </div>
         </div>
-      </header>
+      </div>
 
-      {/* Main */}
-      <main className="relative z-10 max-w-7xl mx-auto px-8 py-12">
-        {/* Search */}
-        <div className="mb-16 animate-slide-up-brutal">
-          <div className="relative max-w-2xl">
-            <input
-              type="text"
-              placeholder="SEARCH TOPICS..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-6 py-5 border-[3px] border-border bg-input font-mono text-sm uppercase tracking-wide focus:outline-none focus:border-primary placeholder:text-muted-fg"
-            />
-            <Search className="absolute right-6 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-fg" />
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto">
+        {/* Search Bar */}
+        <div className="terminal-panel mb-4">
+          <div className="panel-header">TOPIC SEARCH</div>
+          <div className="p-4">
+            <div className="flex items-center gap-2 bg-background border border-border p-2">
+              <Search className="w-4 h-4 text-gray" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search topics or keywords..."
+                className="flex-1 bg-transparent outline-none text-orange placeholder:text-gray font-mono text-sm"
+              />
+            </div>
           </div>
         </div>
 
-        {/* Markets & Tech */}
-        {predefinedTopics.length > 0 && (
-          <section className="mb-16 animate-slide-up-brutal stagger-1">
-            <div className="flex items-center gap-4 mb-8">
-              <h2 className="font-display text-4xl">Markets</h2>
-              <div className="flex-1 h-[3px] bg-border" />
-            </div>
+        {/* Markets Section */}
+        <div className="terminal-panel mb-4">
+          <div className="panel-header flex items-center justify-between">
+            <span>MARKETS</span>
+            <span className="text-gray text-[10px]">{predefinedTopics.length} AVAILABLE</span>
+          </div>
+          <div className="grid grid-cols-3 gap-px bg-border">
+            {predefinedTopics.map((topic, i) => (
+              <button
+                key={topic.id}
+                onClick={() => selectTopic(topic)}
+                className="data-row text-left p-6 bg-card hover:bg-card-hover group"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-orange font-semibold text-sm uppercase tracking-wider">
+                    {topic.name}
+                  </span>
+                  <span className="text-cyan text-xs">{">"}</span>
+                </div>
+                <div className="text-gray text-xs mb-3">
+                  {topic.keywords.slice(0, 3).join(' · ')}
+                </div>
+                <div className="flex items-center gap-2 text-[10px]">
+                  <span className="text-blue">LIVE</span>
+                  <span className="text-gray">|</span>
+                  <span className="text-gray">{topic.keywords.length} KEYWORDS</span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {predefinedTopics.map((topic) => (
-                <TopicCardBrutal key={topic.id} topic={topic} onSelect={selectTopic} />
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Geopolitics */}
+        {/* Geopolitics Section */}
         {geopoliticsTopics.length > 0 && (
-          <section className="mb-16 animate-slide-up-brutal stagger-2">
-            <div className="flex items-center gap-4 mb-8">
-              <h2 className="font-display text-4xl">Geopolitics</h2>
-              <div className="flex-1 h-[3px] bg-border" />
+          <div className="terminal-panel">
+            <div className="panel-header flex items-center justify-between">
+              <span>GEOPOLITICS</span>
+              <span className="text-gray text-[10px]">{geopoliticsTopics.length} REGIONS</span>
             </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-4 gap-px bg-border">
               {geopoliticsTopics.map((topic) => (
-                <TopicCardCompact key={topic.id} topic={topic} onSelect={selectTopic} />
+                <button
+                  key={topic.id}
+                  onClick={() => selectTopic(topic)}
+                  className="data-row text-left p-4 bg-card hover:bg-card-hover group"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-red font-semibold text-xs uppercase tracking-wider">
+                      {topic.name}
+                    </span>
+                    <span className="text-cyan text-xs">{">"}</span>
+                  </div>
+                  <div className="text-gray text-[10px]">
+                    {topic.keywords.length} SOURCES
+                  </div>
+                </button>
               ))}
             </div>
-          </section>
+          </div>
         )}
+      </div>
 
-        {/* Custom */}
-        <section className="animate-slide-up-brutal stagger-3">
-          <button className="card-brutal w-full md:w-auto px-12 py-8 group">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 border-[3px] border-border flex items-center justify-center bg-background">
-                <Plus className="w-6 h-6" />
-              </div>
-              <span className="font-mono font-bold text-sm uppercase tracking-wider">
-                Create Custom
-              </span>
-            </div>
-          </button>
-        </section>
-      </main>
+      {/* Bottom Status Bar */}
+      <div className="fixed bottom-0 left-0 right-0 bg-muted border-t border-border p-2 px-4">
+        <div className="flex items-center justify-between text-[10px] text-gray">
+          <div className="flex items-center gap-6">
+            <span>READY</span>
+            <span>|</span>
+            <span className="text-cyan">SELECT TOPIC TO BEGIN</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <span>HELP: <span className="text-blue">F1</span></span>
+            <span>SEARCH: <span className="text-blue">CTRL+F</span></span>
+          </div>
+        </div>
+      </div>
     </div>
-  );
-}
-
-function TopicCardBrutal({ topic, onSelect }: { topic: Topic; onSelect: (topic: Topic) => void }) {
-  const Icon = topic.icon ? TOPIC_ICONS[topic.icon as keyof typeof TOPIC_ICONS] : Globe;
-
-  const colorClass = topic.id === 'finance' ? 'bg-topic-finance' :
-                     topic.id === 'tech' ? 'bg-topic-tech' :
-                     topic.id === 'crypto' ? 'bg-topic-crypto' : '';
-
-  return (
-    <button
-      onClick={() => onSelect(topic)}
-      className="card-brutal p-8 text-left group animate-slide-brutal"
-    >
-      <div className="accent-bar" style={{ background: topic.color }} />
-
-      <div className={`w-16 h-16 border-[3px] border-border flex items-center justify-center mb-6 ${colorClass}`} style={{ background: topic.color }}>
-        <Icon className="w-8 h-8 text-primary-fg" />
-      </div>
-
-      <h3 className="font-display text-3xl mb-4 leading-tight">
-        {topic.name}
-      </h3>
-
-      <div className="flex flex-wrap gap-2 mb-4">
-        {topic.keywords.slice(0, 2).map((kw) => (
-          <span key={kw} className="px-2 py-1 border border-border font-mono text-xs uppercase bg-muted">
-            {kw}
-          </span>
-        ))}
-      </div>
-
-      <div className="font-mono text-xs uppercase tracking-wider text-secondary">
-        → VIEW FEED
-      </div>
-    </button>
-  );
-}
-
-function TopicCardCompact({ topic, onSelect }: { topic: Topic; onSelect: (topic: Topic) => void }) {
-  return (
-    <button
-      onClick={() => onSelect(topic)}
-      className="card-brutal p-6 text-left group animate-slide-brutal"
-    >
-      <div className="accent-bar-vertical" />
-
-      <h4 className="font-display text-xl mb-2 pl-4">
-        {topic.name}
-      </h4>
-
-      <div className="font-mono text-xs text-secondary uppercase pl-4">
-        {topic.country?.toUpperCase()}
-      </div>
-    </button>
   );
 }

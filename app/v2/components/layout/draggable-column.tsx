@@ -47,39 +47,29 @@ export function DraggableColumn({ column }: DraggableColumnProps) {
     <div
       ref={setNodeRef}
       style={style}
-      className="relative flex flex-col h-full"
+      className="terminal-panel h-full flex flex-col"
     >
-      {/* Brutal Column Header */}
-      <div className="flex items-center justify-between gap-4 mb-4 p-4 border-[3px] border-border bg-card">
-        <div className="accent-bar" />
-
-        {/* Drag Handle */}
+      {/* Panel Header */}
+      <div className="panel-header flex items-center justify-between flex-shrink-0">
         <button
           {...attributes}
           {...listeners}
-          className="flex-shrink-0 w-10 h-10 border-[3px] border-border hover:bg-muted cursor-grab active:cursor-grabbing flex items-center justify-center"
+          className="flex items-center gap-2 hover:text-cyan cursor-grab active:cursor-grabbing"
         >
-          <GripVertical className="w-5 h-5" />
+          <GripVertical className="w-4 h-4" />
+          <span>{column.config.title.toUpperCase()}</span>
         </button>
 
-        {/* Column Title */}
-        <div className="flex-1">
-          <h2 className="font-display text-2xl uppercase tracking-tight">
-            {column.config.title}
-          </h2>
-        </div>
-
-        {/* Remove Button */}
         <button
           onClick={() => removeColumn(column.id)}
-          className="flex-shrink-0 w-10 h-10 border-[3px] border-border hover:bg-destructive hover:text-white flex items-center justify-center"
+          className="hover:text-red text-[10px] tracking-wider"
         >
-          <X className="w-5 h-5" />
+          [X]
         </button>
       </div>
 
       {/* Column Content */}
-      <div className="flex-1 overflow-hidden border-[3px] border-border bg-card shadow-brutal">
+      <div className="flex-1 overflow-hidden">
         {renderColumn()}
       </div>
     </div>
