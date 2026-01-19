@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { NewsItem, FeedSource } from '@/v2/lib/types';
-import { matchesKeywords } from '@/v2/lib/utils';
+import { NewsItem, FeedSource } from '@/app/v2/lib/types';
+import { matchesKeywords } from '@/app/v2/lib/utils';
 
 export function useFilteredFeed(sources: FeedSource[], keywords: string[], refreshInterval = 60000) {
   const [items, setItems] = useState<NewsItem[]>([]);

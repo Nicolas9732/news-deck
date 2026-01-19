@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from 'react';
-import { Topic } from '@/v2/lib/types';
-import { useTopic } from '@/v2/contexts/topic-context';
+import { Topic } from '@/app/v2/lib/types';
+import { useTopic } from '@/app/v2/contexts/topic-context';
 import { TrendingUp, Cpu, Bitcoin, Globe, Search, Plus, Moon, Sun } from 'lucide-react';
-import { useTheme } from '@/v2/contexts/theme-context';
-import { cn } from '@/v2/lib/utils';
+import { useTheme } from '@/app/v2/contexts/theme-context';
+import { cn } from '@/app/v2/lib/utils';
 
 const TOPIC_ICONS = {
   TrendingUp,

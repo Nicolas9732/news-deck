@@ -16,13 +16,13 @@ import {
   sortableKeyboardCoordinates,
   horizontalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { useLayout } from '@/v2/contexts/layout-context';
-import { useTopic } from '@/v2/contexts/topic-context';
+import { useLayout } from '@/app/v2/contexts/layout-context';
+import { useTopic } from '@/app/v2/contexts/topic-context';
 import { DraggableColumn } from './draggable-column';
 import { NewsFeedColumn } from '../columns/news-feed-column';
 import { ReaderColumn } from '../columns/reader-column';
 import { PolymarketColumn } from '../columns/polymarket-column';
-import { Column } from '@/v2/lib/types';
+import { Column } from '@/app/v2/lib/types';
 
 export function ColumnContainer() {
   const { layout, reorderColumns, updateLayout } = useLayout();

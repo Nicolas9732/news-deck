@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { Column } from '@/v2/lib/types';
-import { useLayout } from '@/v2/contexts/layout-context';
+import { Column } from '@/app/v2/lib/types';
+import { useLayout } from '@/app/v2/contexts/layout-context';
 import { ExternalLink, X, ArrowUp } from 'lucide-react';
-import { formatRelativeTime } from '@/v2/lib/utils';
+import { formatRelativeTime } from '@/app/v2/lib/utils';
 
 interface ReaderColumnProps {
   column: Column;

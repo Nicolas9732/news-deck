@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { PolymarketMarket } from '@/v2/lib/types';
+import { PolymarketMarket } from '@/app/v2/lib/types';
 
 export function usePolymarket(keywords: string[], refreshInterval = 15000) {
   const [markets, setMarkets] = useState<PolymarketMarket[]>([]);

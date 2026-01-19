@@ -1,11 +1,11 @@
 "use client";
 
-import { Column } from '@/v2/lib/types';
-import { useTopic } from '@/v2/contexts/topic-context';
-import { useLayout } from '@/v2/contexts/layout-context';
-import { useFilteredFeed } from '@/v2/hooks/use-filtered-feed';
-import { RSS_SOURCES } from '@/v2/lib/sources';
-import { formatRelativeTime, isBreakingNews, cn } from '@/v2/lib/utils';
+import { Column } from '@/app/v2/lib/types';
+import { useTopic } from '@/app/v2/contexts/topic-context';
+import { useLayout } from '@/app/v2/contexts/layout-context';
+import { useFilteredFeed } from '@/app/v2/hooks/use-filtered-feed';
+import { RSS_SOURCES } from '@/app/v2/lib/sources';
+import { formatRelativeTime, isBreakingNews, cn } from '@/app/v2/lib/utils';
 import { Newspaper, ExternalLink } from 'lucide-react';
 
 interface NewsFeedColumnProps {

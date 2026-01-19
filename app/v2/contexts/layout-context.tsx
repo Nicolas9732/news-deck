@@ -1,8 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Column, ColumnLayout, NewsItem } from '@/v2/lib/types';
-import { saveToLocal, loadFromLocal } from '@/v2/lib/utils';
+import { Column, ColumnLayout, NewsItem } from '@/app/v2/lib/types';
+import { saveToLocal, loadFromLocal } from '@/app/v2/lib/utils';
 
 interface LayoutContextType {
   layout: ColumnLayout;

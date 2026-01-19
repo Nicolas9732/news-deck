@@ -1,11 +1,11 @@
 "use client";
 
-import { Column } from '@/v2/lib/types';
-import { useTopic } from '@/v2/contexts/topic-context';
-import { usePolymarket } from '@/v2/hooks/use-polymarket';
-import { POLYMARKET_KEYWORDS } from '@/v2/lib/sources';
+import { Column } from '@/app/v2/lib/types';
+import { useTopic } from '@/app/v2/contexts/topic-context';
+import { usePolymarket } from '@/app/v2/hooks/use-polymarket';
+import { POLYMARKET_KEYWORDS } from '@/app/v2/lib/sources';
 import { TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
-import { cn } from '@/v2/lib/utils';
+import { cn } from '@/app/v2/lib/utils';
 
 interface PolymarketColumnProps {
   column: Column;

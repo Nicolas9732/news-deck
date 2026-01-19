@@ -2,10 +2,10 @@
 
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Column } from '@/v2/lib/types';
+import { Column } from '@/app/v2/lib/types';
 import { GripVertical, X, Settings } from 'lucide-react';
-import { useLayout } from '@/v2/contexts/layout-context';
-import { cn } from '@/v2/lib/utils';
+import { useLayout } from '@/app/v2/contexts/layout-context';
+import { cn } from '@/app/v2/lib/utils';
 
 interface DraggableColumnProps {
   column: Column;

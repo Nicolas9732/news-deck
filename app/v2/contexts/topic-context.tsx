@@ -1,9 +1,9 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Topic } from '@/v2/lib/types';
-import { DEFAULT_TOPICS } from '@/v2/lib/default-topics';
-import { saveToLocal, loadFromLocal } from '@/v2/lib/utils';
+import { Topic } from '@/app/v2/lib/types';
+import { DEFAULT_TOPICS } from '@/app/v2/lib/default-topics';
+import { saveToLocal, loadFromLocal } from '@/app/v2/lib/utils';
 
 interface TopicContextType {
   topics: Topic[];

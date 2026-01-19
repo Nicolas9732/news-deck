@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from 'react';
-import { useTopic } from '@/v2/contexts/topic-context';
-import { useLayout } from '@/v2/contexts/layout-context';
-import { useTheme } from '@/v2/contexts/theme-context';
+import { useTopic } from '@/app/v2/contexts/topic-context';
+import { useLayout } from '@/app/v2/contexts/layout-context';
+import { useTheme } from '@/app/v2/contexts/theme-context';
 import { ArrowLeft, Menu, Moon, Sun, Settings, Plus, LayoutGrid } from 'lucide-react';
-import { cn } from '@/v2/lib/utils';
+import { cn } from '@/app/v2/lib/utils';
 import { ColumnContainer } from './column-container';
 
 export function MonitoringView() {

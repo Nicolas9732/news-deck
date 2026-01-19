@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { ThemeProvider } from "@/v2/contexts/theme-context";
-import { TopicProvider } from "@/v2/contexts/topic-context";
+import { ThemeProvider } from "@/app/v2/contexts/theme-context";
+import { TopicProvider } from "@/app/v2/contexts/topic-context";
 
 export const metadata: Metadata = {
   title: "News Monitoring Platform",
