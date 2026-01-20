@@ -52,28 +52,50 @@ export async function GET() {
   });
 
   // Helper to convert any tweet URL to x.com format with full path
-  const normalizeTwitterUrl = (url: string, username: string): string => {
-    if (!url) return `https://x.com/${username}`;
-    
-    try {
-      const urlObj = new URL(url);
-      const pathname = urlObj.pathname;
-      
-      // Check if it contains a status ID (specific tweet)
-      if (pathname.includes('/status/')) {
-        return `https://x.com${pathname}`;
+  const normalizeTwitterUrl = (url: string, username: string, guid?: string): string => {
+    // Try to extract status ID from various sources
+    const extractStatusId = (text: string): string | null => {
+      if (!text) return null;
+      // Match patterns like /status/1234567890 or status=1234567890
+      const match = text.match(/status[\/=](\d{10,})/i);
+      return match ? match[1] : null;
+    };
+
+    // First try to get status ID from the URL
+    if (url) {
+      const statusId = extractStatusId(url);
+      if (statusId) {
+        return `https://x.com/${username}/status/${statusId}`;
       }
-      
-      // For Nitter/RSSHub URLs that might have the tweet path
-      if (pathname.startsWith(`/${username}`)) {
-        return `https://x.com${pathname}`;
+
+      try {
+        const urlObj = new URL(url);
+        const pathname = urlObj.pathname;
+
+        // Check if pathname contains /status/
+        if (pathname.includes('/status/')) {
+          return `https://x.com${pathname}`;
+        }
+
+        // For Nitter/RSSHub URLs that have the full tweet path
+        if (pathname.startsWith(`/${username}`) && pathname.length > username.length + 2) {
+          return `https://x.com${pathname}`;
+        }
+      } catch {
+        // URL parsing failed, continue to guid check
       }
-      
-      return `https://x.com/${username}`;
-    } catch {
-      // If URL parsing fails, return profile link
-      return `https://x.com/${username}`;
     }
+
+    // Try to extract from guid (RSS feeds often store tweet ID here)
+    if (guid) {
+      const statusId = extractStatusId(guid);
+      if (statusId) {
+        return `https://x.com/${username}/status/${statusId}`;
+      }
+    }
+
+    // Last resort: return profile link
+    return `https://x.com/${username}`;
   };
 
   const fetchUserTweets = async (username: string): Promise<OsintTweet[]> => {
@@ -87,9 +109,9 @@ export async function GET() {
         return feed.items.slice(0, 10).map(item => ({
           id: item.guid || item.link || `${username}-${Date.now()}-${Math.random()}`,
           author: username,
-          content: item.contentSnippet || item.content?.replace(/<[^>]*>/g, '') || '', 
+          content: item.contentSnippet || item.content?.replace(/<[^>]*>/g, '') || '',
           timestamp: item.isoDate || item.pubDate || new Date().toISOString(),
-          url: normalizeTwitterUrl(item.link || '', username)
+          url: normalizeTwitterUrl(item.link || '', username, item.guid)
         }));
       } catch {
         continue;
@@ -106,63 +128,64 @@ export async function GET() {
         return feed.items.slice(0, 10).map(item => ({
           id: item.guid || item.link || `${username}-${Date.now()}-${Math.random()}`,
           author: username,
-          content: item.contentSnippet || item.content?.replace(/<[^>]*>/g, '') || '', 
+          content: item.contentSnippet || item.content?.replace(/<[^>]*>/g, '') || '',
           timestamp: item.isoDate || item.pubDate || new Date().toISOString(),
-          url: normalizeTwitterUrl(item.link || '', username)
+          url: normalizeTwitterUrl(item.link || '', username, item.guid)
         }));
       } catch {
         continue;
       }
     }
-    
+
     // If all instances fail, return empty array for this user
     return [];
   };
 
-  // --- MOCK FALLBACK DATA ---
+  // --- MOCK FALLBACK DATA with realistic tweet URLs ---
   const generateMockTweets = (): OsintTweet[] => {
+    const baseTime = Date.now();
     return [
       {
         id: 'mock-1',
         author: 'PolymarketIntel',
-        content: 'BREAKING: Bitcoin > $100k odds hit 32% on Polymarket as ETF inflows surge. 📈 #Crypto',
-        timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(), // 5 mins ago
-        url: 'https://x.com/PolymarketIntel'
+        content: 'BREAKING: Bitcoin > $100k odds hit 32% on Polymarket as ETF inflows surge.',
+        timestamp: new Date(baseTime - 1000 * 60 * 5).toISOString(),
+        url: 'https://x.com/PolymarketIntel/status/1881234567890123456'
       },
       {
         id: 'mock-2',
         author: 'Deltaone',
         content: 'US DEC. CPI MOM +0.3% VS +0.2% EST; YOY +3.4% VS +3.2% EST.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 12).toISOString(),
-        url: 'https://x.com/Deltaone'
+        timestamp: new Date(baseTime - 1000 * 60 * 12).toISOString(),
+        url: 'https://x.com/Deltaone/status/1881234567890123457'
       },
       {
         id: 'mock-3',
         author: 'WarMonitor3',
         content: 'Reports of air raid sirens in Kyiv. Air defense active in the region.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 25).toISOString(),
-        url: 'https://x.com/WarMonitor3'
+        timestamp: new Date(baseTime - 1000 * 60 * 25).toISOString(),
+        url: 'https://x.com/WarMonitor3/status/1881234567890123458'
       },
       {
         id: 'mock-4',
         author: 'Sino_Market',
         content: 'PBoC sets USD/CNY reference rate at 7.1050 vs 7.1020 previous.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
-        url: 'https://x.com/Sino_Market'
+        timestamp: new Date(baseTime - 1000 * 60 * 45).toISOString(),
+        url: 'https://x.com/Sino_Market/status/1881234567890123459'
       },
       {
         id: 'mock-5',
         author: 'Pizzint',
         content: 'New high-res satellite imagery confirms movement of carrier strike group in the Mediterranean.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
-        url: 'https://x.com/Pizzint'
+        timestamp: new Date(baseTime - 1000 * 60 * 60).toISOString(),
+        url: 'https://x.com/Pizzint/status/1881234567890123460'
       },
       {
         id: 'mock-6',
         author: 'Deltaone',
         content: 'TESLA SHARES DOWN 2% PREMARKET AFTER PRICE CUTS IN CHINA.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
-        url: 'https://x.com/Deltaone'
+        timestamp: new Date(baseTime - 1000 * 60 * 90).toISOString(),
+        url: 'https://x.com/Deltaone/status/1881234567890123461'
       }
     ];
   };

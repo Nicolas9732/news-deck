@@ -55,8 +55,9 @@ export function NewsFeed() {
     );
   }
 
-  const featuredNews = filteredNews.length > 0 ? filteredNews[0] : null;
-  const standardNews = filteredNews.length > 0 ? filteredNews.slice(1) : [];
+  // Only feature articles that have images
+  const featuredNews = filteredNews.find(item => item.imageUrl) || null;
+  const standardNews = filteredNews.filter(item => item !== featuredNews);
 
   // Show search results message when filtering
   const isSearching = searchQuery.trim().length > 0;

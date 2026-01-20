@@ -33,7 +33,7 @@ interface CacheEntry<T> {
 
 const cache: Record<string, CacheEntry<MarketItem[]>> = {};
 let trendingCache: { data: TrendingCompany[]; timestamp: number } | null = null;
-const CACHE_DURATION = 60 * 1000; // 1 minute
+const CACHE_DURATION = 2 * 60 * 1000; // 2 minutes - reduced rate limiting issues
 
 interface YahooQuote {
   symbol: string;

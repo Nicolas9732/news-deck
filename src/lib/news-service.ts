@@ -3,6 +3,15 @@ import { NewsItem, Category, PolymarketData } from '@/types';
 
 const parser = new Parser();
 
+// Filter articles to only show those from the last 24 hours
+const MAX_AGE_MS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+function isWithin24Hours(timestamp: string): boolean {
+  const articleDate = new Date(timestamp).getTime();
+  const now = Date.now();
+  return (now - articleDate) <= MAX_AGE_MS;
+}
+
 const FEEDS: Record<string, string[]> = {
   'Finance': [
     'https://www.cnbc.com/id/15839069/device/rss/rss.html', // CNBC Investing
@@ -53,31 +62,33 @@ export async function fetchNews(category: string): Promise<NewsItem[]> {
     for (const url of urls) {
       try {
         const feed = await parser.parseURL(url);
-        const items = feed.items.map((item) => {
-          // Attempt to find an image
-          let imageUrl = undefined;
-          if (item.enclosure && item.enclosure.url && item.enclosure.type?.startsWith('image')) {
-            imageUrl = item.enclosure.url;
-          } else if (item['media:content'] && item['media:content']['$'] && item['media:content']['$']['url']) {
-             imageUrl = item['media:content']['$']['url'];
-          } else if (item.content && item.content.match(/src="([^"]+)"/)) {
-            const match = item.content.match(/src="([^"]+)"/);
-            if (match) imageUrl = match[1];
-          }
+        const items = feed.items
+          .map((item) => {
+            // Attempt to find an image
+            let imageUrl = undefined;
+            if (item.enclosure && item.enclosure.url && item.enclosure.type?.startsWith('image')) {
+              imageUrl = item.enclosure.url;
+            } else if (item['media:content'] && item['media:content']['$'] && item['media:content']['$']['url']) {
+              imageUrl = item['media:content']['$']['url'];
+            } else if (item.content && item.content.match(/src="([^"]+)"/)) {
+              const match = item.content.match(/src="([^"]+)"/);
+              if (match) imageUrl = match[1];
+            }
 
-          return {
-            id: item.guid || item.link || Math.random().toString(),
-            title: item.title || 'No Title',
-            summary: item.contentSnippet || item.content || '',
-            content: item.content || '',
-            source: feed.title || 'Unknown Source',
-            url: item.link || '',
-            category: cat as Category,
-            timestamp: item.pubDate || new Date().toISOString(),
-            imageUrl: imageUrl,
-            readingTime: Math.ceil((item.contentSnippet?.length || 0) / 200) || 1,
-          };
-        });
+            return {
+              id: item.guid || item.link || Math.random().toString(),
+              title: item.title || 'No Title',
+              summary: item.contentSnippet || item.content || '',
+              content: item.content || '',
+              source: feed.title || 'Unknown Source',
+              url: item.link || '',
+              category: cat as Category,
+              timestamp: item.pubDate || new Date().toISOString(),
+              imageUrl: imageUrl,
+              readingTime: Math.ceil((item.contentSnippet?.length || 0) / 200) || 1,
+            };
+          })
+          .filter(item => isWithin24Hours(item.timestamp)); // Only keep articles from last 24 hours
         itemsByCategory[cat].push(...items);
       } catch (error) {
         console.error(`[NewsService] Error fetching ${url}:`, error);

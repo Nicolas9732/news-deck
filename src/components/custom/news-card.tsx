@@ -3,7 +3,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { NewsItem } from '@/types';
-import { Clock, Hash, Heart, MoreHorizontal, ImageOff } from 'lucide-react';
+import { Clock, Hash, Heart, MoreHorizontal } from 'lucide-react';
 import { formatRelativeTime, cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { getCategoryColor } from '@/lib/category-colors';
@@ -14,21 +14,11 @@ interface NewsCardProps {
   compact?: boolean; // Kept for backward compatibility, maps to standard
 }
 
-// Category-based fallback gradients for cards without images
-const categoryGradients: Record<string, string> = {
-  Tech: 'from-blue-600/20 to-blue-900/40',
-  Finance: 'from-emerald-600/20 to-emerald-900/40',
-  Crypto: 'from-amber-600/20 to-amber-900/40',
-  Geopolitics: 'from-rose-600/20 to-rose-900/40',
-  Climate: 'from-teal-600/20 to-teal-900/40',
-  AI: 'from-violet-600/20 to-violet-900/40',
-  Macro: 'from-slate-600/20 to-slate-900/40',
-};
 
 export function NewsCard({ item, variant = 'standard' }: NewsCardProps) {
   const isFeatured = variant === 'featured';
   const categoryColor = getCategoryColor(item.category);
-  const fallbackGradient = categoryGradients[item.category] || 'from-primary/20 to-primary/40';
+  const hasImage = !!item.imageUrl;
 
   return (
     <a
@@ -39,43 +29,38 @@ export function NewsCard({ item, variant = 'standard' }: NewsCardProps) {
     >
       <Card className={cn(
         "group relative flex flex-col h-full overflow-hidden border-border/40 bg-card transition-all hover:shadow-md hover:border-border/80",
-        isFeatured ? 'md:flex-row md:items-stretch' : '',
+        isFeatured && hasImage ? 'md:flex-row md:items-stretch' : '',
         !isFeatured && 'border-l-2',
         !isFeatured && categoryColor.border
       )}>
         
         {/* Image Section - Featured: side image, Standard: top thumbnail */}
+        {/* Only show image section if there's an image, otherwise show thin colored strip */}
         {isFeatured ? (
-          <div className="w-full md:w-2/5 bg-muted relative overflow-hidden order-first md:order-last">
-            {item.imageUrl ? (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img 
-                src={item.imageUrl} 
-                alt={item.title} 
-                className="w-full h-48 md:h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+          item.imageUrl ? (
+            <div className="w-full md:w-2/5 bg-muted relative overflow-hidden order-first md:order-last">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={item.imageUrl}
+                alt={item.title}
+                className="w-full h-48 md:h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
-            ) : (
-              <div className={cn("w-full h-48 md:h-full bg-gradient-to-br flex items-center justify-center", fallbackGradient)}>
-                <ImageOff className="w-12 h-12 text-muted-foreground/30" />
-              </div>
-            )}
-          </div>
+            </div>
+          ) : null
         ) : (
-          /* Standard card thumbnail */
-          <div className="w-full h-32 bg-muted relative overflow-hidden">
-            {item.imageUrl ? (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img 
-                src={item.imageUrl} 
-                alt={item.title} 
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+          /* Standard card: show image if exists, otherwise thin colored strip */
+          item.imageUrl ? (
+            <div className="w-full h-32 bg-muted relative overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={item.imageUrl}
+                alt={item.title}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
-            ) : (
-              <div className={cn("w-full h-full bg-gradient-to-br flex items-center justify-center", fallbackGradient)}>
-                <ImageOff className="w-8 h-8 text-muted-foreground/30" />
-              </div>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div className={cn("w-full h-1", categoryColor.bg)} />
+          )
         )}
 
         <div className={cn("flex flex-col flex-1", isFeatured ? 'justify-center p-2' : '')}>

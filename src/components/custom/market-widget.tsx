@@ -58,6 +58,7 @@ export function MarketWidget() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<TabType>('indices');
   const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchData = async () => {
     try {
@@ -68,8 +69,23 @@ export function MarketWidget() {
         crypto: json.crypto || [],
         commodities: json.commodities || [],
       });
+
+      // Check for partial errors
+      if (json.errors) {
+        const failedCategories = Object.entries(json.errors)
+          .filter(([, v]) => v !== null)
+          .map(([k]) => k);
+        if (failedCategories.length > 0) {
+          setError(`Some data unavailable: ${failedCategories.join(', ')}`);
+        } else {
+          setError(null);
+        }
+      } else {
+        setError(null);
+      }
     } catch (error) {
       console.error('Failed to fetch market data', error);
+      setError('Failed to load market data');
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -185,6 +201,11 @@ export function MarketWidget() {
             ))
           )}
         </div>
+        {error && (
+          <div className="px-3 py-2 text-xs text-amber-500 bg-amber-500/10 border-t border-amber-500/20">
+            {error}
+          </div>
+        )}
       </CardContent>
     </Card>
   );
