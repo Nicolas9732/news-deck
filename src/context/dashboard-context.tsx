@@ -26,7 +26,10 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
     const saved = localStorage.getItem('dashboard-config');
     if (saved) {
       try {
-        setConfig(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        setTimeout(() => {
+          setConfig((prev) => ({ ...prev, ...parsed }));
+        }, 0);
       } catch (e) {
         console.error('Failed to parse dashboard config', e);
       }
