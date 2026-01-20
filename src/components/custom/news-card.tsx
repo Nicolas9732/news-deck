@@ -11,11 +11,11 @@ interface NewsCardProps {
 
 export function NewsCard({ item, compact }: NewsCardProps) {
   return (
-    <Card className="group overflow-hidden border-border/50 bg-card transition-all hover:shadow-md hover:border-border">
+    <Card className="group overflow-hidden border-border/40 bg-card transition-all hover:shadow-sm hover:border-border/80">
       <CardHeader className="p-4 pb-2">
         <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-            <span className="flex items-center gap-1 bg-muted px-1.5 py-0.5 rounded">
+          <div className="flex items-center gap-2 text-[10px] font-medium uppercase tracking-widest text-muted-foreground/80">
+            <span className="flex items-center gap-1 bg-muted/50 px-1.5 py-0.5 rounded">
               <Hash size={10} />
               {item.category}
             </span>
@@ -28,26 +28,26 @@ export function NewsCard({ item, compact }: NewsCardProps) {
             href={item.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-muted-foreground hover:text-foreground transition-colors"
+            className="text-muted-foreground/50 hover:text-foreground transition-colors"
           >
             <ExternalLink size={14} />
           </a>
         </div>
-        <CardTitle className={`leading-tight font-semibold ${compact ? 'text-base' : 'text-lg'}`}>
+        <CardTitle className={`leading-tight font-semibold tracking-tight ${compact ? 'text-base' : 'text-lg'}`}>
           {item.title}
         </CardTitle>
       </CardHeader>
       <CardContent className="p-4 pt-0">
-        <p className="text-sm text-muted-foreground leading-snug line-clamp-3">
+        <p className="text-sm text-foreground/80 leading-relaxed line-clamp-3">
           {item.summary}
         </p>
       </CardContent>
-      <CardFooter className="p-4 pt-0 flex items-center justify-between border-0">
-        <span className="text-[11px] font-medium text-muted-foreground">
+      <CardFooter className="p-4 pt-2 flex items-center justify-between border-0">
+        <span className="text-[11px] font-medium text-muted-foreground/70">
           {item.source}
         </span>
         {item.readingTime && (
-          <span className="text-[11px] text-muted-foreground">
+          <span className="text-[11px] text-muted-foreground/70">
             {item.readingTime} min read
           </span>
         )}
