@@ -15,10 +15,10 @@
 ## 🚀 Phase 2: Core MVP
 - [✅] Define Shared Types (`src/types/index.ts`)
 - [✅] Implement Mock News Data Engine (`src/lib/mock-data.ts`)
-- [⏳] Build Dashboard Layout (`src/components/custom/dashboard-layout.tsx`)
-- [⏳] Build Perplexity-style News Card (`src/components/custom/news-card.tsx`)
+- [✅] Build Dashboard Layout (`src/components/custom/dashboard-layout.tsx`)
+- [✅] Build Perplexity-style News Card (`src/components/custom/news-card.tsx`)
 - [✅] Implement Global Dashboard Context (`src/context/dashboard-context.tsx`)
-- [⏳] Build Settings Panel (`src/components/custom/settings-panel.tsx`)
+- [✅] Build Settings Panel (`src/components/custom/settings-panel.tsx`)
 
 ## 🎨 Phase 3: Polishing
 - [⏳] Add Loading Skeletons
