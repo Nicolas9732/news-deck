@@ -1,4 +1,4 @@
-import { NewsItem, Category } from '@/types';
+import { NewsItem, Category, MarketItem, WeatherData, TrendingCompany } from '@/types';
 
 const MOCK_NEWS: NewsItem[] = [
   {
@@ -74,6 +74,84 @@ export async function getNews(category?: Category): Promise<NewsItem[]> {
   return MOCK_NEWS;
 }
 
+
 export async function getCategories(): Promise<Category[]> {
   return ['AI', 'Crypto', 'Tech', 'Macro'];
+}
+
+export const MOCK_MARKET: MarketItem[] = [
+  {
+    symbol: 'SPX',
+    name: 'S&P 500',
+    price: 4783.45,
+    change: 0.54,
+    changeValue: 25.6,
+    isPositive: true,
+    history: [4750, 4760, 4755, 4770, 4780, 4783.45]
+  },
+  {
+    symbol: 'NDX',
+    name: 'NASDAQ',
+    price: 16832.90,
+    change: 0.89,
+    changeValue: 148.2,
+    isPositive: true,
+    history: [16700, 16750, 16720, 16800, 16810, 16832.90]
+  },
+  {
+    symbol: 'VIX',
+    name: 'Volatility',
+    price: 13.45,
+    change: -2.3,
+    changeValue: -0.32,
+    isPositive: false, // For VIX, down is usually "good" but strictly numerically it's negative change
+    history: [14.0, 13.8, 13.9, 13.6, 13.5, 13.45]
+  },
+  {
+    symbol: 'BTC',
+    name: 'Bitcoin',
+    price: 64230.50,
+    change: 1.2,
+    changeValue: 760.3,
+    isPositive: true,
+    history: [63500, 63800, 63600, 64000, 64100, 64230.50]
+  }
+];
+
+export const MOCK_WEATHER: WeatherData = {
+  location: 'Zurich',
+  currentTemp: 18,
+  condition: 'cloudy',
+  humidity: 65,
+  windSpeed: 12,
+  forecast: [
+    { day: 'Mon', tempMin: 12, tempMax: 20, condition: 'sunny' },
+    { day: 'Tue', tempMin: 14, tempMax: 22, condition: 'cloudy' },
+    { day: 'Wed', tempMin: 13, tempMax: 19, condition: 'rain' },
+    { day: 'Thu', tempMin: 11, tempMax: 18, condition: 'cloudy' },
+    { day: 'Fri', tempMin: 10, tempMax: 17, condition: 'sunny' }
+  ]
+};
+
+export const MOCK_TRENDING: TrendingCompany[] = [
+  { id: '1', name: 'NVIDIA Corp', symbol: 'NVDA', price: 890.55, change: 3.4, isPositive: true },
+  { id: '2', name: 'Tesla Inc', symbol: 'TSLA', price: 175.30, change: -1.2, isPositive: false },
+  { id: '3', name: 'Microsoft', symbol: 'MSFT', price: 420.10, change: 0.8, isPositive: true },
+  { id: '4', name: 'Apple Inc', symbol: 'AAPL', price: 170.25, change: -0.5, isPositive: false },
+  { id: '5', name: 'Meta Platforms', symbol: 'META', price: 495.60, change: 1.5, isPositive: true }
+];
+
+export async function getMarketData(): Promise<MarketItem[]> {
+  await new Promise(resolve => setTimeout(resolve, 500));
+  return MOCK_MARKET;
+}
+
+export async function getWeatherData(): Promise<WeatherData> {
+  await new Promise(resolve => setTimeout(resolve, 500));
+  return MOCK_WEATHER;
+}
+
+export async function getTrendingCompanies(): Promise<TrendingCompany[]> {
+  await new Promise(resolve => setTimeout(resolve, 500));
+  return MOCK_TRENDING;
 }

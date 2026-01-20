@@ -20,3 +20,38 @@ export interface DashboardConfig {
   layoutMode: LayoutMode;
   isCompact: boolean;
 }
+
+export interface MarketItem {
+  symbol: string;
+  name: string;
+  price: number;
+  change: number; // percentage
+  changeValue: number;
+  isPositive: boolean;
+  history: number[]; // For sparkline
+}
+
+export interface WeatherForecast {
+  day: string;
+  tempMin: number;
+  tempMax: number;
+  condition: 'sunny' | 'cloudy' | 'rain' | 'snow' | 'storm';
+}
+
+export interface WeatherData {
+  location: string;
+  currentTemp: number;
+  condition: 'sunny' | 'cloudy' | 'rain' | 'snow' | 'storm';
+  humidity: number;
+  windSpeed: number;
+  forecast: WeatherForecast[];
+}
+
+export interface TrendingCompany {
+  id: string;
+  name: string;
+  symbol: string;
+  price: number;
+  change: number;
+  isPositive: boolean;
+}
