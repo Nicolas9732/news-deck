@@ -1,4 +1,4 @@
-export type Category = 'AI' | 'Crypto' | 'Tech' | 'Macro';
+export type Category = 'AI' | 'Crypto' | 'Tech' | 'Macro' | 'Finance' | 'Geopolitics' | 'Climate';
 
 export interface NewsItem {
   id: string;
@@ -16,7 +16,7 @@ export interface NewsItem {
 export type LayoutMode = 'grid' | 'list';
 
 export interface DashboardConfig {
-  visibleCategories: Category[];
+  activeTopic: string;
   layoutMode: LayoutMode;
   isCompact: boolean;
 }
@@ -54,4 +54,20 @@ export interface TrendingCompany {
   price: number;
   change: number;
   isPositive: boolean;
+}
+
+export interface PolymarketData {
+  id: string;
+  question: string;
+  yes: number;
+  no: number;
+  volume: string;
+}
+
+export interface OsintTweet {
+  id: string;
+  author: string;
+  content: string;
+  timestamp: string;
+  url: string;
 }
