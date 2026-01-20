@@ -1,4 +1,4 @@
-import { NewsItem, Category, MarketItem, WeatherData, TrendingCompany } from '@/types';
+import { NewsItem, Category, MarketItem, TrendingCompany } from '@/types';
 
 const MOCK_NEWS: NewsItem[] = [
   {
@@ -76,7 +76,7 @@ export async function getNews(category?: Category): Promise<NewsItem[]> {
 
 
 export async function getCategories(): Promise<Category[]> {
-  return ['AI', 'Crypto', 'Tech', 'Macro'];
+  return ['AI', 'Crypto', 'Tech', 'Macro', 'Finance', 'Geopolitics', 'Climate'];
 }
 
 export const MOCK_MARKET: MarketItem[] = [
@@ -118,21 +118,6 @@ export const MOCK_MARKET: MarketItem[] = [
   }
 ];
 
-export const MOCK_WEATHER: WeatherData = {
-  location: 'Zurich',
-  currentTemp: 18,
-  condition: 'cloudy',
-  humidity: 65,
-  windSpeed: 12,
-  forecast: [
-    { day: 'Mon', tempMin: 12, tempMax: 20, condition: 'sunny' },
-    { day: 'Tue', tempMin: 14, tempMax: 22, condition: 'cloudy' },
-    { day: 'Wed', tempMin: 13, tempMax: 19, condition: 'rain' },
-    { day: 'Thu', tempMin: 11, tempMax: 18, condition: 'cloudy' },
-    { day: 'Fri', tempMin: 10, tempMax: 17, condition: 'sunny' }
-  ]
-};
-
 export const MOCK_TRENDING: TrendingCompany[] = [
   { id: '1', name: 'NVIDIA Corp', symbol: 'NVDA', price: 890.55, change: 3.4, isPositive: true },
   { id: '2', name: 'Tesla Inc', symbol: 'TSLA', price: 175.30, change: -1.2, isPositive: false },
@@ -144,11 +129,6 @@ export const MOCK_TRENDING: TrendingCompany[] = [
 export async function getMarketData(): Promise<MarketItem[]> {
   await new Promise(resolve => setTimeout(resolve, 500));
   return MOCK_MARKET;
-}
-
-export async function getWeatherData(): Promise<WeatherData> {
-  await new Promise(resolve => setTimeout(resolve, 500));
-  return MOCK_WEATHER;
 }
 
 export async function getTrendingCompanies(): Promise<TrendingCompany[]> {

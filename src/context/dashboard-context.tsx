@@ -1,25 +1,27 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { DashboardConfig, Category, LayoutMode } from '@/types';
+import { DashboardConfig, LayoutMode } from '@/types';
 
 interface DashboardContextType extends DashboardConfig {
-  setVisibleCategories: (categories: Category[]) => void;
+  setActiveTopic: (topic: string) => void;
   setLayoutMode: (mode: LayoutMode) => void;
   setIsCompact: (isCompact: boolean) => void;
-  toggleCategory: (category: Category) => void;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
 }
 
 const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
 
 const DEFAULT_CONFIG: DashboardConfig = {
-  visibleCategories: ['AI', 'Crypto', 'Tech', 'Macro'],
+  activeTopic: 'For You',
   layoutMode: 'grid',
   isCompact: false,
 };
 
 export function DashboardProvider({ children }: { children: React.ReactNode }) {
   const [config, setConfig] = useState<DashboardConfig>(DEFAULT_CONFIG);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Load from localStorage if available
   useEffect(() => {
@@ -27,6 +29,10 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
+        // Ensure activeTopic exists if we're migrating from an old config
+        if (!parsed.activeTopic) {
+           parsed.activeTopic = 'For You';
+        }
         setTimeout(() => {
           setConfig((prev) => ({ ...prev, ...parsed }));
         }, 0);
@@ -41,8 +47,8 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('dashboard-config', JSON.stringify(config));
   }, [config]);
 
-  const setVisibleCategories = (categories: Category[]) => {
-    setConfig((prev) => ({ ...prev, visibleCategories: categories }));
+  const setActiveTopic = (topic: string) => {
+    setConfig((prev) => ({ ...prev, activeTopic: topic }));
   };
 
   const setLayoutMode = (mode: LayoutMode) => {
@@ -53,31 +59,15 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
     setConfig((prev) => ({ ...prev, isCompact }));
   };
 
-  const toggleCategory = (category: Category) => {
-    setConfig((prev) => {
-      const isVisible = prev.visibleCategories.includes(category);
-      if (isVisible) {
-        return {
-          ...prev,
-          visibleCategories: prev.visibleCategories.filter((c) => c !== category),
-        };
-      } else {
-        return {
-          ...prev,
-          visibleCategories: [...prev.visibleCategories, category],
-        };
-      }
-    });
-  };
-
   return (
     <DashboardContext.Provider
       value={{
         ...config,
-        setVisibleCategories,
+        setActiveTopic,
         setLayoutMode,
         setIsCompact,
-        toggleCategory,
+        searchQuery,
+        setSearchQuery,
       }}
     >
       {children}

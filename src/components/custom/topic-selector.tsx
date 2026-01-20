@@ -4,28 +4,29 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Plus } from 'lucide-react';
+import { useDashboard } from '@/context/dashboard-context';
 
 interface TopicSelectorProps {
   className?: string;
 }
 
 export function TopicSelector({ className }: TopicSelectorProps) {
-  const [activeTab, setActiveTab] = React.useState('For You');
+  const { activeTopic, setActiveTopic } = useDashboard();
 
   const mainTabs = ['For You', 'Top'];
-  const topics = ['Finance', 'Tech', 'Geopolitics'];
+  const topics = ['Finance', 'Tech', 'Geopolitics', 'Climate', 'Crypto'];
 
   return (
     <div className={cn("flex items-center gap-2 overflow-x-auto no-scrollbar py-1", className)}>
       {mainTabs.map((tab) => (
         <Button
           key={tab}
-          variant={activeTab === tab ? "secondary" : "ghost"}
+          variant={activeTopic === tab ? "secondary" : "ghost"}
           size="sm"
-          onClick={() => setActiveTab(tab)}
+          onClick={() => setActiveTopic(tab)}
           className={cn(
             "rounded-full px-4 text-sm font-medium transition-all shrink-0",
-            activeTab === tab 
+            activeTopic === tab 
               ? "bg-muted text-foreground hover:bg-muted/80" 
               : "text-muted-foreground hover:text-foreground hover:bg-transparent"
           )}
@@ -39,12 +40,12 @@ export function TopicSelector({ className }: TopicSelectorProps) {
       {topics.map((topic) => (
         <Button
           key={topic}
-          variant={activeTab === topic ? "secondary" : "ghost"}
+          variant={activeTopic === topic ? "secondary" : "ghost"}
           size="sm"
-          onClick={() => setActiveTab(topic)}
+          onClick={() => setActiveTopic(topic)}
           className={cn(
             "rounded-full px-4 text-sm font-medium transition-all shrink-0",
-            activeTab === topic
+            activeTopic === topic
               ? "bg-muted text-foreground hover:bg-muted/80" 
               : "text-muted-foreground hover:text-foreground hover:bg-transparent"
           )}
