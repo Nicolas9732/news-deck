@@ -30,7 +30,10 @@
 ---
 
 ## 🔮 Phase 4: Future Improvements (Backlog)
-- [⏳] Implement Real API integrations (Polymarket, Twitter, CoinGecko)
-- [⏳] Add Search Functionality
+- [🚧] Implement Real API integrations
+  - [✅] Twitter (OSINT/Nitter)
+  - [⏳] CoinGecko
+  - [⏳] Polymarket (Real API)
+- [✅] Add Search Functionality
 - [⏳] Implement Drag-and-Drop for widgets
 - [⏳] Add Vitest and Playwright test suites
